@@ -1,0 +1,1 @@
+The slider on my Kiwi-8P is busted so I'm making a shell to drop CC and/or sysex commands into it. As with all my audio endeavors, I am making this solely to suit my needs, but the code will be small for anybody to hack to his or her desires.
