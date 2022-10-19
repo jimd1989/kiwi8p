@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+
 /* Sysex message format */
 #define SYSEX_START 240
 #define MANUFACTURER_ID_1 0
@@ -44,29 +45,33 @@ typedef struct Cmd {
 
 /* Transformer declarations */
 uint16_t readInt(char *);
+uint16_t selectWave(char *);
+uint16_t coarseTune(char *);
+uint16_t fineTune(char *);
+uint16_t dcoControl(char *);
 
-#define UNKNOWN_FUNC 128
+#define INVALID 128
 
 /* Alphabets */
 #define ALPHABET_SIZE 59
 
 static const Cmd CMDS_PURE[ALPHABET_SIZE] = {
   { 109, readInt}, /* A */
-  { UNKNOWN_FUNC, readInt}, /* B */
+  { INVALID, readInt}, /* B */
   { 38, readInt}, /* C */
   { 94, readInt}, /* D */
   { 37, readInt}, /* E */
-  { UNKNOWN_FUNC, readInt}, /* F */
-  { UNKNOWN_FUNC, readInt}, /* G */
-  { UNKNOWN_FUNC, readInt}, /* H */
-  { UNKNOWN_FUNC, readInt}, /* I */
-  { UNKNOWN_FUNC, readInt}, /* J */
-  { UNKNOWN_FUNC, readInt}, /* K */
-  { UNKNOWN_FUNC, readInt}, /* L */
-  { UNKNOWN_FUNC, readInt}, /* M */
+  { INVALID, readInt}, /* F */
+  { INVALID, readInt}, /* G */
+  { INVALID, readInt}, /* H */
+  { INVALID, readInt}, /* I */
+  { INVALID, readInt}, /* J */
+  { INVALID, readInt}, /* K */
+  { INVALID, readInt}, /* L */
+  { INVALID, readInt}, /* M */
   { 95, readInt}, /* N */
-  { UNKNOWN_FUNC, readInt}, /* O */
-  { UNKNOWN_FUNC, readInt}, /* P */
+  { INVALID, readInt}, /* O */
+  { INVALID, readInt}, /* P */
   { 65, readInt}, /* Q */
   { 93, readInt}, /* R */
   { 113, readInt}, /* S */
@@ -77,58 +82,58 @@ static const Cmd CMDS_PURE[ALPHABET_SIZE] = {
   { 67, readInt}, /* X */
   { 36, readInt}, /* Y */
   { 68, readInt}, /* Z */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
   { 77, readInt}, /* a */
   { 118, readInt}, /* b */
-  { 25, readInt}, /* c */
+  { 25, dcoControl}, /* c */
   { 78, readInt}, /* d */
   { 23, readInt}, /* e */
   { 40, readInt}, /* f */
-  { UNKNOWN_FUNC, readInt}, /* g */
-  { UNKNOWN_FUNC, readInt}, /* h */
+  { INVALID, readInt}, /* g */
+  { INVALID, readInt}, /* h */
   { 107, readInt}, /* i */
-  { UNKNOWN_FUNC, readInt}, /* j */
+  { INVALID, readInt}, /* j */
   { 81, readInt}, /* k */
   { 22, readInt}, /* l */
-  { UNKNOWN_FUNC, readInt}, /* m */
-  { UNKNOWN_FUNC, readInt}, /* n */
+  { INVALID, readInt}, /* m */
+  { INVALID, readInt}, /* n */
   { 104, readInt}, /* o */
   { 105, readInt}, /* p */
   { 53, readInt}, /* q */
   { 80, readInt}, /* r */
   { 79, readInt}, /* s */
-  { 21, readInt}, /* t */
+  { 21, coarseTune}, /* t */
   { 54, readInt}, /* u */
   { 49, readInt}, /* v */
-  { 20, readInt}, /* w */
+  { 20, selectWave}, /* w */
   { 55, readInt}, /* x */
   { 24, readInt}, /* y */
   { 56, readInt}, /* z */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
 };
 
 static const Cmd CMDS_DOT[ALPHABET_SIZE] = {
   { 110, readInt}, /* A. */
-  { UNKNOWN_FUNC, readInt}, /* B. */
-  { UNKNOWN_FUNC, readInt}, /* C. */
+  { INVALID, readInt}, /* B. */
+  { INVALID, readInt}, /* C. */
   { 98, readInt}, /* D. */
-  { UNKNOWN_FUNC, readInt}, /* E. */
-  { UNKNOWN_FUNC, readInt}, /* F. */
-  { UNKNOWN_FUNC, readInt}, /* G. */
-  { UNKNOWN_FUNC, readInt}, /* H. */
-  { UNKNOWN_FUNC, readInt}, /* I. */
-  { UNKNOWN_FUNC, readInt}, /* J. */
-  { UNKNOWN_FUNC, readInt}, /* K. */
-  { UNKNOWN_FUNC, readInt}, /* L. */
-  { UNKNOWN_FUNC, readInt}, /* M. */
+  { INVALID, readInt}, /* E. */
+  { INVALID, readInt}, /* F. */
+  { INVALID, readInt}, /* G. */
+  { INVALID, readInt}, /* H. */
+  { INVALID, readInt}, /* I. */
+  { INVALID, readInt}, /* J. */
+  { INVALID, readInt}, /* K. */
+  { INVALID, readInt}, /* L. */
+  { INVALID, readInt}, /* M. */
   { 99, readInt}, /* N. */
-  { UNKNOWN_FUNC, readInt}, /* O. */
-  { UNKNOWN_FUNC, readInt}, /* P. */
+  { INVALID, readInt}, /* O. */
+  { INVALID, readInt}, /* P. */
   { 69, readInt}, /* Q. */
   { 97, readInt}, /* R. */
   { 119, readInt}, /* S. */
@@ -137,165 +142,165 @@ static const Cmd CMDS_DOT[ALPHABET_SIZE] = {
   { 35, readInt}, /* V. */
   { 96, readInt}, /* W. */
   { 71, readInt}, /* X. */
-  { UNKNOWN_FUNC, readInt}, /* Y. */
+  { INVALID, readInt}, /* Y. */
   { 72, readInt}, /* Z. */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
   { 82, readInt}, /* a. */
   { 111, readInt}, /* b. */
-  { 32, readInt}, /* c. */
+  { 32, dcoControl}, /* c. */
   { 83, readInt}, /* d. */
   { 30, readInt}, /* e. */
   { 42, readInt}, /* f. */
-  { UNKNOWN_FUNC, readInt}, /* g. */
-  { UNKNOWN_FUNC, readInt}, /* h. */
+  { INVALID, readInt}, /* g. */
+  { INVALID, readInt}, /* h. */
   { 108, readInt}, /* i. */
-  { UNKNOWN_FUNC, readInt}, /* j. */
+  { INVALID, readInt}, /* j. */
   { 86, readInt}, /* k. */
   { 29, readInt}, /* l. */
-  { UNKNOWN_FUNC, readInt}, /* m. */
-  { UNKNOWN_FUNC, readInt}, /* n. */
-  { UNKNOWN_FUNC, readInt}, /* o. */
-  { UNKNOWN_FUNC, readInt}, /* p. */
+  { INVALID, readInt}, /* m. */
+  { INVALID, readInt}, /* n. */
+  { INVALID, readInt}, /* o. */
+  { INVALID, readInt}, /* p. */
   { 57, readInt}, /* q. */
   { 85, readInt}, /* r. */
   { 84, readInt}, /* s. */
-  { 27, readInt}, /* t. */
+  { 27, coarseTune}, /* t. */
   { 58, readInt}, /* u. */
-  { UNKNOWN_FUNC, readInt}, /* v. */
-  { 26, readInt}, /* w. */
+  { INVALID, readInt}, /* v. */
+  { 26, selectWave}, /* w. */
   { 59, readInt}, /* x. */
   { 31, readInt}, /* y. */
   { 60, readInt}, /* z. */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
 };
 
 static const Cmd CMDS_COLON[ALPHABET_SIZE] = {
   { 121, readInt}, /* A: */
-  { UNKNOWN_FUNC, readInt}, /* B: */
-  { UNKNOWN_FUNC, readInt}, /* C: */
+  { INVALID, readInt}, /* B: */
+  { INVALID, readInt}, /* C: */
   { 102, readInt}, /* D: */
-  { UNKNOWN_FUNC, readInt}, /* E: */
-  { UNKNOWN_FUNC, readInt}, /* F: */
-  { UNKNOWN_FUNC, readInt}, /* G: */
-  { UNKNOWN_FUNC, readInt}, /* H: */
-  { UNKNOWN_FUNC, readInt}, /* I: */
-  { UNKNOWN_FUNC, readInt}, /* J: */
-  { UNKNOWN_FUNC, readInt}, /* K: */
-  { UNKNOWN_FUNC, readInt}, /* L: */
-  { UNKNOWN_FUNC, readInt}, /* M: */
+  { INVALID, readInt}, /* E: */
+  { INVALID, readInt}, /* F: */
+  { INVALID, readInt}, /* G: */
+  { INVALID, readInt}, /* H: */
+  { INVALID, readInt}, /* I: */
+  { INVALID, readInt}, /* J: */
+  { INVALID, readInt}, /* K: */
+  { INVALID, readInt}, /* L: */
+  { INVALID, readInt}, /* M: */
   { 103, readInt}, /* N: */
-  { UNKNOWN_FUNC, readInt}, /* O: */
-  { UNKNOWN_FUNC, readInt}, /* P: */
+  { INVALID, readInt}, /* O: */
+  { INVALID, readInt}, /* P: */
   { 73, readInt}, /* Q: */
   { 101, readInt}, /* R: */
   { 120, readInt}, /* S: */
   { 117, readInt}, /* T: */
   { 74, readInt}, /* U: */
-  { UNKNOWN_FUNC, readInt}, /* V: */
+  { INVALID, readInt}, /* V: */
   { 100, readInt}, /* W: */
   { 75, readInt}, /* X: */
-  { UNKNOWN_FUNC, readInt}, /* Y: */
+  { INVALID, readInt}, /* Y: */
   { 76, readInt}, /* Z: */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
   { 87, readInt}, /* a: */
   { 112, readInt}, /* b: */
   { 51, readInt}, /* c: */
   { 88, readInt}, /* d: */
-  { UNKNOWN_FUNC, readInt}, /* e: */
+  { INVALID, readInt}, /* e: */
   { 39, readInt}, /* f: */
-  { UNKNOWN_FUNC, readInt}, /* g: */
-  { UNKNOWN_FUNC, readInt}, /* h: */
-  { UNKNOWN_FUNC, readInt}, /* i: */
-  { UNKNOWN_FUNC, readInt}, /* j: */
+  { INVALID, readInt}, /* g: */
+  { INVALID, readInt}, /* h: */
+  { INVALID, readInt}, /* i: */
+  { INVALID, readInt}, /* j: */
   { 91, readInt}, /* k: */
   { 50, readInt}, /* l: */
-  { UNKNOWN_FUNC, readInt}, /* m: */
-  { UNKNOWN_FUNC, readInt}, /* n: */
-  { UNKNOWN_FUNC, readInt}, /* o: */
-  { UNKNOWN_FUNC, readInt}, /* p: */
+  { INVALID, readInt}, /* m: */
+  { INVALID, readInt}, /* n: */
+  { INVALID, readInt}, /* o: */
+  { INVALID, readInt}, /* p: */
   { 61, readInt}, /* q: */
   { 90, readInt}, /* r: */
   { 89, readInt}, /* s: */
-  { 28, readInt}, /* t: */
+  { 28, fineTune}, /* t: */
   { 62, readInt}, /* u: */
-  { UNKNOWN_FUNC, readInt}, /* v: */
-  { UNKNOWN_FUNC, readInt}, /* w: */
+  { INVALID, readInt}, /* v: */
+  { INVALID, readInt}, /* w: */
   { 63, readInt}, /* x: */
   { 52, readInt}, /* y: */
   { 64, readInt}, /* z: */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
 };
 
 static const Cmd CMDS_AT[ALPHABET_SIZE] = {
-  { UNKNOWN_FUNC, readInt}, /* A@ */
-  { UNKNOWN_FUNC, readInt}, /* B@ */
-  { UNKNOWN_FUNC, readInt}, /* C@ */
-  { UNKNOWN_FUNC, readInt}, /* D@ */
-  { UNKNOWN_FUNC, readInt}, /* E@ */
-  { UNKNOWN_FUNC, readInt}, /* F@ */
-  { UNKNOWN_FUNC, readInt}, /* G@ */
-  { UNKNOWN_FUNC, readInt}, /* H@ */
-  { UNKNOWN_FUNC, readInt}, /* I@ */
-  { UNKNOWN_FUNC, readInt}, /* J@ */
-  { UNKNOWN_FUNC, readInt}, /* K@ */
-  { UNKNOWN_FUNC, readInt}, /* L@ */
-  { UNKNOWN_FUNC, readInt}, /* M@ */
-  { UNKNOWN_FUNC, readInt}, /* N@ */
-  { UNKNOWN_FUNC, readInt}, /* O@ */
-  { UNKNOWN_FUNC, readInt}, /* P@ */
-  { UNKNOWN_FUNC, readInt}, /* Q@ */
-  { UNKNOWN_FUNC, readInt}, /* R@ */
+  { INVALID, readInt}, /* A@ */
+  { INVALID, readInt}, /* B@ */
+  { INVALID, readInt}, /* C@ */
+  { INVALID, readInt}, /* D@ */
+  { INVALID, readInt}, /* E@ */
+  { INVALID, readInt}, /* F@ */
+  { INVALID, readInt}, /* G@ */
+  { INVALID, readInt}, /* H@ */
+  { INVALID, readInt}, /* I@ */
+  { INVALID, readInt}, /* J@ */
+  { INVALID, readInt}, /* K@ */
+  { INVALID, readInt}, /* L@ */
+  { INVALID, readInt}, /* M@ */
+  { INVALID, readInt}, /* N@ */
+  { INVALID, readInt}, /* O@ */
+  { INVALID, readInt}, /* P@ */
+  { INVALID, readInt}, /* Q@ */
+  { INVALID, readInt}, /* R@ */
   { 106, readInt}, /* S@ */
-  { UNKNOWN_FUNC, readInt}, /* T@ */
-  { UNKNOWN_FUNC, readInt}, /* U@ */
-  { UNKNOWN_FUNC, readInt}, /* V@ */
-  { UNKNOWN_FUNC, readInt}, /* W@ */
-  { UNKNOWN_FUNC, readInt}, /* X@ */
-  { UNKNOWN_FUNC, readInt}, /* Y@ */
-  { UNKNOWN_FUNC, readInt}, /* Z@ */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
-  { UNKNOWN_FUNC, readInt}, /* a@ */
-  { UNKNOWN_FUNC, readInt}, /* b@ */
+  { INVALID, readInt}, /* T@ */
+  { INVALID, readInt}, /* U@ */
+  { INVALID, readInt}, /* V@ */
+  { INVALID, readInt}, /* W@ */
+  { INVALID, readInt}, /* X@ */
+  { INVALID, readInt}, /* Y@ */
+  { INVALID, readInt}, /* Z@ */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt}, /* a@ */
+  { INVALID, readInt}, /* b@ */
   { 48, readInt}, /* c@ */
-  { UNKNOWN_FUNC, readInt}, /* d@ */
+  { INVALID, readInt}, /* d@ */
   { 45, readInt}, /* e@ */
-  { UNKNOWN_FUNC, readInt}, /* f@ */
-  { UNKNOWN_FUNC, readInt}, /* g@ */
-  { UNKNOWN_FUNC, readInt}, /* h@ */
-  { UNKNOWN_FUNC, readInt}, /* i@ */
-  { UNKNOWN_FUNC, readInt}, /* j@ */
+  { INVALID, readInt}, /* f@ */
+  { INVALID, readInt}, /* g@ */
+  { INVALID, readInt}, /* h@ */
+  { INVALID, readInt}, /* i@ */
+  { INVALID, readInt}, /* j@ */
   { 46, readInt}, /* k@ */
   { 44, readInt}, /* l@ */
-  { UNKNOWN_FUNC, readInt}, /* m@ */
-  { UNKNOWN_FUNC, readInt}, /* n@ */
-  { UNKNOWN_FUNC, readInt}, /* o@ */
-  { UNKNOWN_FUNC, readInt}, /* p@ */
-  { UNKNOWN_FUNC, readInt}, /* q@ */
-  { UNKNOWN_FUNC, readInt}, /* r@ */
-  { UNKNOWN_FUNC, readInt}, /* s@ */
+  { INVALID, readInt}, /* m@ */
+  { INVALID, readInt}, /* n@ */
+  { INVALID, readInt}, /* o@ */
+  { INVALID, readInt}, /* p@ */
+  { INVALID, readInt}, /* q@ */
+  { INVALID, readInt}, /* r@ */
+  { INVALID, readInt}, /* s@ */
   { 33, readInt}, /* t@ */
-  { UNKNOWN_FUNC, readInt}, /* u@ */
-  { UNKNOWN_FUNC, readInt}, /* v@ */
-  { UNKNOWN_FUNC, readInt}, /* w@ */
-  { UNKNOWN_FUNC, readInt}, /* x@ */
+  { INVALID, readInt}, /* u@ */
+  { INVALID, readInt}, /* v@ */
+  { INVALID, readInt}, /* w@ */
+  { INVALID, readInt}, /* x@ */
   { 47, readInt}, /* y@ */
-  { UNKNOWN_FUNC, readInt}, /* z@ */
-  { UNKNOWN_FUNC, readInt}, /* ignored */
+  { INVALID, readInt}, /* z@ */
+  { INVALID, readInt}, /* ignored */
 };
 
 /*
