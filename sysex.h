@@ -53,6 +53,7 @@ uint16_t vcaControl(char *);
 uint16_t matrixSource(char *);
 uint16_t matrixControl(char*);
 uint16_t matrixDestination(char *);
+uint16_t selectLfoWave(char *);
 
 #define INVALID 128
 
@@ -82,7 +83,7 @@ static const Cmd CMDS_PURE[ALPHABET_SIZE] = {
   { 114, readInt}, /* T */
   { 66, matrixControl}, /* U */
   { 34, readInt}, /* V */
-  { 92, readInt}, /* W */
+  { 92, selectLfoWave}, /* W */
   { 67, readInt}, /* X */
   { 36, readInt}, /* Y */
   { 68, matrixDestination}, /* Z */
@@ -144,7 +145,7 @@ static const Cmd CMDS_DOT[ALPHABET_SIZE] = {
   { 116, readInt}, /* T. */
   { 70, matrixControl}, /* U. */
   { 35, readInt}, /* V. */
-  { 96, readInt}, /* W. */
+  { 96, selectLfoWave}, /* W. */
   { 71, readInt}, /* X. */
   { INVALID, readInt}, /* Y. */
   { 72, matrixDestination}, /* Z. */
@@ -206,7 +207,7 @@ static const Cmd CMDS_COLON[ALPHABET_SIZE] = {
   { 117, readInt}, /* T: */
   { 74, matrixControl}, /* U: */
   { INVALID, readInt}, /* V: */
-  { 100, readInt}, /* W: */
+  { 100, selectLfoWave}, /* W: */
   { 75, readInt}, /* X: */
   { INVALID, readInt}, /* Y: */
   { 76, matrixDestination}, /* Z: */

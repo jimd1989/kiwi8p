@@ -179,6 +179,15 @@ uint16_t matrixDestination(char *s) {
          *s == 'P' ? 15 : INVALID;
 }
 
+uint16_t selectLfoWave(char *s) {
+  return *s == 'i' ? 0 :
+         *s == 't' ? 1 :
+         *s == 'q' ? 2 :
+         *s == 's' ? 3 :
+         *s == 'S' ? 4 :
+         *s == 'r' ? 5 : INVALID;
+}
+
 /* core functions */
 static char* eatSpace(char *s) {
   while (isspace(*s)) {
