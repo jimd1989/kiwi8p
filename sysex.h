@@ -52,6 +52,7 @@ uint16_t envLfoControl(char *);
 uint16_t vcaControl(char *);
 uint16_t matrixSource(char *);
 uint16_t matrixControl(char*);
+uint16_t matrixDestination(char *);
 
 #define INVALID 128
 
@@ -84,7 +85,7 @@ static const Cmd CMDS_PURE[ALPHABET_SIZE] = {
   { 92, readInt}, /* W */
   { 67, readInt}, /* X */
   { 36, readInt}, /* Y */
-  { 68, readInt}, /* Z */
+  { 68, matrixDestination}, /* Z */
   { INVALID, readInt}, /* ignored */
   { INVALID, readInt}, /* ignored */
   { INVALID, readInt}, /* ignored */
@@ -116,7 +117,7 @@ static const Cmd CMDS_PURE[ALPHABET_SIZE] = {
   { 20, selectWave}, /* w */
   { 55, readInt}, /* x */
   { 24, readInt}, /* y */
-  { 56, readInt}, /* z */
+  { 56, matrixDestination}, /* z */
   { INVALID, readInt}, /* ignored */
 };
 
@@ -146,7 +147,7 @@ static const Cmd CMDS_DOT[ALPHABET_SIZE] = {
   { 96, readInt}, /* W. */
   { 71, readInt}, /* X. */
   { INVALID, readInt}, /* Y. */
-  { 72, readInt}, /* Z. */
+  { 72, matrixDestination}, /* Z. */
   { INVALID, readInt}, /* ignored */
   { INVALID, readInt}, /* ignored */
   { INVALID, readInt}, /* ignored */
@@ -178,7 +179,7 @@ static const Cmd CMDS_DOT[ALPHABET_SIZE] = {
   { 26, selectWave}, /* w. */
   { 59, readInt}, /* x. */
   { 31, readInt}, /* y. */
-  { 60, readInt}, /* z. */
+  { 60, matrixDestination}, /* z. */
   { INVALID, readInt}, /* ignored */
 };
 
@@ -208,7 +209,7 @@ static const Cmd CMDS_COLON[ALPHABET_SIZE] = {
   { 100, readInt}, /* W: */
   { 75, readInt}, /* X: */
   { INVALID, readInt}, /* Y: */
-  { 76, readInt}, /* Z: */
+  { 76, matrixDestination}, /* Z: */
   { INVALID, readInt}, /* ignored */
   { INVALID, readInt}, /* ignored */
   { INVALID, readInt}, /* ignored */
@@ -240,7 +241,7 @@ static const Cmd CMDS_COLON[ALPHABET_SIZE] = {
   { INVALID, readInt}, /* w: */
   { 63, readInt}, /* x: */
   { 52, readInt}, /* y: */
-  { 64, readInt}, /* z: */
+  { 64, matrixDestination}, /* z: */
   { INVALID, readInt}, /* ignored */
 };
 

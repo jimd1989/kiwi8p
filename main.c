@@ -146,6 +146,38 @@ uint16_t matrixControl(char *s) {
          *s == 't' ? 12 + i : INVALID;
 }
 
+uint16_t matrixDestination(char *s) {
+  if (*s == 'p') {
+    s++;
+    return *s == '1'  ? 1 :
+           *s == '2'  ? 2 :
+           *s == '\0' ? 3 : INVALID;
+  } else if (*s == 'w') {
+    INCREMENT(s)
+    return 4 + (((uint8_t)*s - 49) * 2);
+  } else if (*s == 'r') {
+    INCREMENT(s)
+    return 5 + (((uint8_t)*s - 49) * 2);
+  } else if (*s == 'm') {
+    INCREMENT(s)
+    return 9 + ((uint8_t)*s - 49);
+  } else if (*s == 'f') {
+    s++;
+    return *s == '.'  ? 12 :
+           *s == ':'  ? 13 :
+           *s == '\0' ? 11 : INVALID;
+  } else if (*s == 'l') {
+    INCREMENT(s)
+    return 16 + ((uint8_t)*s - 49);
+  } else if (*s == 'e') {
+    INCREMENT(s)
+    return 19 + ((uint8_t)*s - 49);
+  }
+  return *s == 'o' ? 0  :
+         *s == 'd' ? 8  :
+         *s == 'v' ? 14 :
+         *s == 'P' ? 15 : INVALID;
+}
 
 /* core functions */
 static char* eatSpace(char *s) {
