@@ -48,7 +48,10 @@ uint16_t readInt(char *);
 uint16_t selectWave(char *);
 uint16_t coarseTune(char *);
 uint16_t fineTune(char *);
-uint16_t dcoControl(char *);
+uint16_t envLfoControl(char *);
+uint16_t vcaControl(char *);
+uint16_t matrixSource(char *);
+uint16_t matrixControl(char*);
 
 #define INVALID 128
 
@@ -58,7 +61,7 @@ uint16_t dcoControl(char *);
 static const Cmd CMDS_PURE[ALPHABET_SIZE] = {
   { 109, readInt}, /* A */
   { INVALID, readInt}, /* B */
-  { 38, readInt}, /* C */
+  { 38, envLfoControl}, /* C */
   { 94, readInt}, /* D */
   { 37, readInt}, /* E */
   { INVALID, readInt}, /* F */
@@ -72,11 +75,11 @@ static const Cmd CMDS_PURE[ALPHABET_SIZE] = {
   { 95, readInt}, /* N */
   { INVALID, readInt}, /* O */
   { INVALID, readInt}, /* P */
-  { 65, readInt}, /* Q */
+  { 65, matrixSource}, /* Q */
   { 93, readInt}, /* R */
   { 113, readInt}, /* S */
   { 114, readInt}, /* T */
-  { 66, readInt}, /* U */
+  { 66, matrixControl}, /* U */
   { 34, readInt}, /* V */
   { 92, readInt}, /* W */
   { 67, readInt}, /* X */
@@ -90,7 +93,7 @@ static const Cmd CMDS_PURE[ALPHABET_SIZE] = {
   { INVALID, readInt}, /* ignored */
   { 77, readInt}, /* a */
   { 118, readInt}, /* b */
-  { 25, dcoControl}, /* c */
+  { 25, envLfoControl}, /* c */
   { 78, readInt}, /* d */
   { 23, readInt}, /* e */
   { 40, readInt}, /* f */
@@ -104,11 +107,11 @@ static const Cmd CMDS_PURE[ALPHABET_SIZE] = {
   { INVALID, readInt}, /* n */
   { 104, readInt}, /* o */
   { 105, readInt}, /* p */
-  { 53, readInt}, /* q */
+  { 53, matrixSource}, /* q */
   { 80, readInt}, /* r */
   { 79, readInt}, /* s */
   { 21, coarseTune}, /* t */
-  { 54, readInt}, /* u */
+  { 54, matrixControl}, /* u */
   { 49, readInt}, /* v */
   { 20, selectWave}, /* w */
   { 55, readInt}, /* x */
@@ -134,11 +137,11 @@ static const Cmd CMDS_DOT[ALPHABET_SIZE] = {
   { 99, readInt}, /* N. */
   { INVALID, readInt}, /* O. */
   { INVALID, readInt}, /* P. */
-  { 69, readInt}, /* Q. */
+  { 69, matrixSource}, /* Q. */
   { 97, readInt}, /* R. */
   { 119, readInt}, /* S. */
   { 116, readInt}, /* T. */
-  { 70, readInt}, /* U. */
+  { 70, matrixControl}, /* U. */
   { 35, readInt}, /* V. */
   { 96, readInt}, /* W. */
   { 71, readInt}, /* X. */
@@ -152,7 +155,7 @@ static const Cmd CMDS_DOT[ALPHABET_SIZE] = {
   { INVALID, readInt}, /* ignored */
   { 82, readInt}, /* a. */
   { 111, readInt}, /* b. */
-  { 32, dcoControl}, /* c. */
+  { 32, envLfoControl}, /* c. */
   { 83, readInt}, /* d. */
   { 30, readInt}, /* e. */
   { 42, readInt}, /* f. */
@@ -166,11 +169,11 @@ static const Cmd CMDS_DOT[ALPHABET_SIZE] = {
   { INVALID, readInt}, /* n. */
   { INVALID, readInt}, /* o. */
   { INVALID, readInt}, /* p. */
-  { 57, readInt}, /* q. */
+  { 57, matrixSource}, /* q. */
   { 85, readInt}, /* r. */
   { 84, readInt}, /* s. */
   { 27, coarseTune}, /* t. */
-  { 58, readInt}, /* u. */
+  { 58, matrixControl}, /* u. */
   { INVALID, readInt}, /* v. */
   { 26, selectWave}, /* w. */
   { 59, readInt}, /* x. */
@@ -196,11 +199,11 @@ static const Cmd CMDS_COLON[ALPHABET_SIZE] = {
   { 103, readInt}, /* N: */
   { INVALID, readInt}, /* O: */
   { INVALID, readInt}, /* P: */
-  { 73, readInt}, /* Q: */
+  { 73, matrixSource}, /* Q: */
   { 101, readInt}, /* R: */
   { 120, readInt}, /* S: */
   { 117, readInt}, /* T: */
-  { 74, readInt}, /* U: */
+  { 74, matrixControl}, /* U: */
   { INVALID, readInt}, /* V: */
   { 100, readInt}, /* W: */
   { 75, readInt}, /* X: */
@@ -214,7 +217,7 @@ static const Cmd CMDS_COLON[ALPHABET_SIZE] = {
   { INVALID, readInt}, /* ignored */
   { 87, readInt}, /* a: */
   { 112, readInt}, /* b: */
-  { 51, readInt}, /* c: */
+  { 51, vcaControl}, /* c: */
   { 88, readInt}, /* d: */
   { INVALID, readInt}, /* e: */
   { 39, readInt}, /* f: */
@@ -228,11 +231,11 @@ static const Cmd CMDS_COLON[ALPHABET_SIZE] = {
   { INVALID, readInt}, /* n: */
   { INVALID, readInt}, /* o: */
   { INVALID, readInt}, /* p: */
-  { 61, readInt}, /* q: */
+  { 61, matrixSource}, /* q: */
   { 90, readInt}, /* r: */
   { 89, readInt}, /* s: */
   { 28, fineTune}, /* t: */
-  { 62, readInt}, /* u: */
+  { 62, matrixControl}, /* u: */
   { INVALID, readInt}, /* v: */
   { INVALID, readInt}, /* w: */
   { 63, readInt}, /* x: */
@@ -276,7 +279,7 @@ static const Cmd CMDS_AT[ALPHABET_SIZE] = {
   { INVALID, readInt}, /* ignored */
   { INVALID, readInt}, /* a@ */
   { INVALID, readInt}, /* b@ */
-  { 48, readInt}, /* c@ */
+  { 48, envLfoControl}, /* c@ */
   { INVALID, readInt}, /* d@ */
   { 45, readInt}, /* e@ */
   { INVALID, readInt}, /* f@ */

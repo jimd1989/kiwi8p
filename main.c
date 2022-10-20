@@ -10,6 +10,8 @@
 
 #define BUF_SIZE 4906
 
+#define INCREMENT(S) if (*S == '\0') { return INVALID; } else { S++; }
+
 static char * eatSpace(char *);
 static void   parseCmd(char *);
 static void   runCmd(char, char, char *);
@@ -27,7 +29,7 @@ uint16_t selectWave(char *s) {
               *s == 'n' ? 3 : INVALID;
   uint8_t x = 0;
   uint8_t r = INVALID;
-  s++;
+  INCREMENT(s)
   if      (*s == 'y') { x = 1; s++; }
   else if (*s == 'Y') { x = 2; s++; }
   else if (*s == 'x') { x = 3; s++; }
@@ -48,20 +50,20 @@ uint16_t fineTune(char *s) {
   return 63 + atoi(s);
 }
 
-uint16_t dcoControl(char *s) {
+uint16_t envLfoControl(char *s) {
   int8_t e  = 0;
   int8_t ei = 0;
   int8_t l  = 0;
   int8_t li = 0;
   while(*s != '\0') {
     if (*s == 'e') {
-      s++;
+      INCREMENT(s)
       if (*s == '-') { ei = 1; s++; }
       e = ((uint8_t)*s - 49) & 3;
       s++;
     }
     else if (*s == 'l') {
-      s++;
+      INCREMENT(s)
       if (*s == '-') { li = 1; s++; }
       l = ((uint8_t)*s - 49) & 3;
       s++;
@@ -70,6 +72,80 @@ uint16_t dcoControl(char *s) {
   }
   return e | (l << 2) | (ei << 4) | (li << 5);
 }
+
+uint16_t vcaControl(char *s) {
+  int8_t e  = 0;
+  int8_t l  = 0;
+  int8_t li = 0;
+  while(*s != '\0') {
+    if (*s == 'e') {
+      INCREMENT(s)
+      e = ((uint8_t)*s - 48) & 3;
+      s++;
+    }
+    else if (*s == 'l') {
+      INCREMENT(s)
+      if (*s == '-') { li = 1; s++; }
+      l = ((uint8_t)*s - 49) & 3;
+      s++;
+    }
+    else { return INVALID; }
+  }
+  return e | (l << 3) | (li << 6);
+}
+
+uint16_t matrixSource(char *s) {
+  uint8_t l = 8;
+  if (*s == 'b') {
+    s++;
+    return *s == 'u'  ? 1  :
+           *s == 'd'  ? 2  :
+           *s == 'w'  ? 32 :
+           *s == '\0' ? 3  : INVALID;
+  } else if (*s == 'l') {
+    INCREMENT(s)
+    l += ((uint8_t)*s - 49) * 2;
+    s++;
+    return l + (*s == 'u'); 
+  } else if (*s == 'e') {
+    INCREMENT(s)
+    return 14 + ((uint8_t)*s - 49);
+  } else if (*s == 'c') {
+    INCREMENT(s)
+    return 17 + ((uint8_t)*s - 49);
+  } else if (*s == 's') {
+    INCREMENT(s)
+    return 26 + ((uint8_t)*s - 49);
+  }
+  return *s == 'o' ? 0  :
+         *s == 'w' ? 4  :
+         *s == 'd' ? 5  :
+         *s == 'v' ? 6  :
+         *s == 'n' ? 7  :
+         *s == 't' ? 25 : INVALID;
+}
+
+uint16_t matrixControl(char *s) {
+  uint8_t i = (*s == '-');
+  INCREMENT(s)
+  if (*s == 'b') {
+    s++;
+    return *s == 'u'  ? 2 + i :
+           *s == 'd'  ? 4 + i :
+           *s == '\0' ? 6 + i : INVALID;
+  } else if (*s == 'c') {
+    INCREMENT(s)
+    return 14 + (((uint8_t)*s - 49) * 2) + i;
+  } else if (*s == 's') {
+    INCREMENT(s)
+    return 30 + ((uint8_t)*s - 49);
+  }
+  return *s == 'o' ? 0 + i  :
+         *s == 'w' ? 8 + i  :
+         *s == 'd' ? 10 + i :
+         *s == 't' ? 12 + i : INVALID;
+}
+
 
 /* core functions */
 static char* eatSpace(char *s) {
