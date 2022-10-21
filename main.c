@@ -188,7 +188,129 @@ uint16_t selectLfoWave(char *s) {
          *s == 'r' ? 5 : INVALID;
 }
 
+uint16_t lfoControl(char *s) {
+  uint8_t f = (*s == '+');
+  float d = 0.0f;
+  uint8_t l = INVALID;
+  INCREMENT(s)
+  d = atof(s);
+  l = d == 0.0f   ? 0  :
+      d == 2.0f   ? 1  :
+      d == 1.5f   ? 2  :
+      d == 1.0f   ? 3  :
+      d == 1.25f  ? 4  :
+      d == 1.2f   ? 5  :
+      d == 1.45f  ? 6  :
+      d == 1.4f   ? 7  :
+      d == 1.85f  ? 8  :
+      d == 1.43f  ? 9  :
+      d == 1.8f   ? 10 :
+      d == 1.83f  ? 11 :
+      d == 1.16f  ? 12 :
+      d == 1.163f ? 13 :
+      d == 1.32f  ? 14 :
+      d == 1.323f ? 15 :
+      d == 1.64f  ? 16 : INVALID;
+  return l != INVALID ? f | (l << 1) : l;
+}
+
+uint16_t voiceMode1(char *s) {
+  uint8_t r = 0;
+  uint8_t l = 0;
+  uint8_t p = 0;
+  while (*s != '\0') {
+    if      (*s == 's') { p = 0 ; s++;    }
+    else if (*s == 'd') { p = 1 ; s++;    }
+    else if (*s == 't') { p = 2 ; s++;    }
+    else if (*s == 'u') { p = 4 ; s++;    }
+    else if (*s == 'S') { p = 5 ; s++;    }
+    else if (*s == 'r') { r = 1 ; s++;    }
+    else if (*s == 'l') { l = 1 ; s++;    }
+    else                { return INVALID; }
+  }
+  return p | (r << 3) | (l << 4);
+}
+
+uint16_t voiceMode2(char *s) {
+  return *s == 'o' ? 0 :
+         *s == 'n' ? 1 :
+         *s == 'h' ? 2 :
+         *s == 'l' ? 3 :
+         *s == 'q' ? 4 :
+         *s == 'i' ? 5 : INVALID;
+}
+
+uint16_t arpControl(char *s) {
+  uint8_t o = (uint8_t)*s - 49;
+  uint8_t p = INVALID;
+  INCREMENT(s)
+  p = *s == 'u' ? 0 :
+      *s == 'd' ? 1 :
+      *s == 'b' ? 2 :
+      *s == 'r' ? 3 :
+      *s == 'p' ? 4 : INVALID;
+  return (o & 3) | (p << 3);
+}
+
+uint16_t afterTouchWheelControl(char *s) {
+  uint8_t n = 0;
+  while (*s != '\0') {
+    if      (*s == 'l') { n |= 1; s++; }
+    else if (*s == 'f') { n |= 2; s++; }
+    else if (*s == 'v') { n |= 4; s++; }
+    else                { return INVALID; }
+  }
+  return n;
+}
+
+uint16_t midiControl(char *s) {
+  uint8_t n = 0;
+  while (*s != '\0') {
+    if      (*s == 'a') { n |= 1; s++; }
+    else if (*s == 's') { n |= 2; s++; }
+    else if (*s == 'h') { n |= 8; s++; }
+    else                { return INVALID; }
+  }
+  return n;
+}
+
+uint16_t clockDivide(char *s) {
+  float f = atof(s);
+  return f == 1.2f   ? 0  :
+         f == 1.4f   ? 1  :
+         f == 1.8f   ? 2  :
+         f == 1.85f  ? 3  :
+         f == 1.89f  ? 4  :
+         f == 1.83f  ? 5  :
+         f == 1.16f  ? 6  :
+         f == 1.165f ? 7  :
+         f == 1.169f ? 8  :
+         f == 1.163f ? 9  :
+         f == 1.32f  ? 10 :
+         f == 1.323f ? 11 :
+         f == 1.64f  ? 12 : INVALID;
+}
+
+uint16_t seqControl(char *s) {
+  uint8_t n = 0;
+  while (*s != '\0') {
+    if      (*s == 'o') { n |= 1; s++; }
+    else if (*s == 'k') { n |= 2; s++; }
+    else if (*s == 't') { n |= 4; s++; }
+    else if (*s == 'r') { n |= 8; s++; }
+    else if (*s == 'c') { n |= 16; s++; }
+    else                { return INVALID; }
+  }
+  return n;
+}
+
+uint16_t seqTranspose(char *s) {
+  return 12 + atoi(s);
+} 
+
 /* core functions */
+
+/* Need special delivery for internal clock */
 static char* eatSpace(char *s) {
   while (isspace(*s)) {
     s++;
@@ -225,6 +347,9 @@ static void runCmd(char l, char m, char *arg) {
 }
 
 static void editParam(uint8_t p, uint16_t v) {
+  if (v == NOOP) {
+    return;
+  }
   if (p == INVALID || v == INVALID) {
     warnx("%s", "bad input");
     return;

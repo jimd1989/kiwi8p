@@ -54,258 +54,268 @@ uint16_t matrixSource(char *);
 uint16_t matrixControl(char*);
 uint16_t matrixDestination(char *);
 uint16_t selectLfoWave(char *);
+uint16_t lfoControl(char *);
+uint16_t voiceMode1(char *);
+uint16_t voiceMode2(char *);
+uint16_t arpControl(char *);
+uint16_t afterTouchWheelControl(char *);
+uint16_t midiControl(char *);
+uint16_t clockDivide(char *);
+uint16_t seqControl(char *);
+uint16_t seqTranspose(char *);
 
 #define INVALID 128
+#define NOOP    129
 
 /* Alphabets */
 #define ALPHABET_SIZE 59
 
 static const Cmd CMDS_PURE[ALPHABET_SIZE] = {
-  { 109, readInt}, /* A */
-  { INVALID, readInt}, /* B */
-  { 38, envLfoControl}, /* C */
-  { 94, readInt}, /* D */
-  { 37, readInt}, /* E */
-  { INVALID, readInt}, /* F */
-  { INVALID, readInt}, /* G */
-  { INVALID, readInt}, /* H */
-  { INVALID, readInt}, /* I */
-  { INVALID, readInt}, /* J */
-  { INVALID, readInt}, /* K */
-  { INVALID, readInt}, /* L */
-  { INVALID, readInt}, /* M */
-  { 95, readInt}, /* N */
-  { INVALID, readInt}, /* O */
-  { INVALID, readInt}, /* P */
-  { 65, matrixSource}, /* Q */
-  { 93, readInt}, /* R */
-  { 113, readInt}, /* S */
-  { 114, readInt}, /* T */
-  { 66, matrixControl}, /* U */
-  { 34, readInt}, /* V */
-  { 92, selectLfoWave}, /* W */
-  { 67, readInt}, /* X */
-  { 36, readInt}, /* Y */
-  { 68, matrixDestination}, /* Z */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { 77, readInt}, /* a */
-  { 118, readInt}, /* b */
-  { 25, envLfoControl}, /* c */
-  { 78, readInt}, /* d */
-  { 23, readInt}, /* e */
-  { 40, readInt}, /* f */
-  { INVALID, readInt}, /* g */
-  { INVALID, readInt}, /* h */
-  { 107, readInt}, /* i */
-  { INVALID, readInt}, /* j */
-  { 81, readInt}, /* k */
-  { 22, readInt}, /* l */
-  { INVALID, readInt}, /* m */
-  { INVALID, readInt}, /* n */
-  { 104, readInt}, /* o */
-  { 105, readInt}, /* p */
-  { 53, matrixSource}, /* q */
-  { 80, readInt}, /* r */
-  { 79, readInt}, /* s */
-  { 21, coarseTune}, /* t */
-  { 54, matrixControl}, /* u */
-  { 49, readInt}, /* v */
-  { 20, selectWave}, /* w */
-  { 55, readInt}, /* x */
-  { 24, readInt}, /* y */
-  { 56, matrixDestination}, /* z */
-  { INVALID, readInt}, /* ignored */
+  { 109, arpControl },       /* A */
+  { INVALID, readInt },      /* B */
+  { 38, envLfoControl },     /* C */
+  { 94, readInt },           /* D */
+  { 37, readInt },           /* E */
+  { INVALID, readInt },      /* F */
+  { INVALID, readInt },      /* G */
+  { INVALID, readInt },      /* H */
+  { INVALID, readInt },      /* I */
+  { INVALID, readInt },      /* J */
+  { INVALID, readInt },      /* K */
+  { INVALID, readInt },      /* L */
+  { INVALID, readInt },      /* M */
+  { 95, lfoControl },        /* N */
+  { 104, readInt },          /* O */
+  { INVALID, readInt },      /* P */
+  { 65, matrixSource },      /* Q */
+  { 93, readInt },           /* R */
+  { 113, midiControl },      /* S */
+  { 114, readInt },          /* T */
+  { 66, matrixControl },     /* U */
+  { 34, readInt },           /* V */
+  { 92, selectLfoWave },     /* W */
+  { 67, readInt },           /* X */
+  { 36, readInt },           /* Y */
+  { 68, matrixDestination }, /* Z */
+  { INVALID, readInt },      /* ignored */
+  { INVALID, readInt },      /* ignored */
+  { INVALID, readInt },      /* ignored */
+  { INVALID, readInt },      /* ignored */
+  { INVALID, readInt },      /* ignored */
+  { INVALID, readInt },      /* ignored */
+  { 77, readInt },           /* a */
+  { 118, readInt },          /* b */
+  { 25, envLfoControl },     /* c */
+  { 78, readInt },           /* d */
+  { 23, readInt },           /* e */
+  { 40, readInt },           /* f */
+  { INVALID, readInt },      /* g */
+  { INVALID, readInt },      /* h */
+  { 107, voiceMode1 },       /* i */
+  { INVALID, readInt },      /* j */
+  { 81, readInt },           /* k */
+  { 22, readInt },           /* l */
+  { INVALID, readInt },      /* m */
+  { INVALID, readInt },      /* n */
+  { INVALID, readInt },      /* o */
+  { 105, readInt },          /* p */
+  { 53, matrixSource },      /* q */
+  { 80, readInt },           /* r */
+  { 79, readInt },           /* s */
+  { 21, coarseTune },        /* t */
+  { 54, matrixControl },     /* u */
+  { 49, readInt },           /* v */
+  { 20, selectWave },        /* w */
+  { 55, readInt },           /* x */
+  { 24, readInt },           /* y */
+  { 56, matrixDestination }, /* z */
+  { INVALID, readInt },      /* ignored */
 };
 
 static const Cmd CMDS_DOT[ALPHABET_SIZE] = {
-  { 110, readInt}, /* A. */
-  { INVALID, readInt}, /* B. */
-  { INVALID, readInt}, /* C. */
-  { 98, readInt}, /* D. */
-  { INVALID, readInt}, /* E. */
-  { INVALID, readInt}, /* F. */
-  { INVALID, readInt}, /* G. */
-  { INVALID, readInt}, /* H. */
-  { INVALID, readInt}, /* I. */
-  { INVALID, readInt}, /* J. */
-  { INVALID, readInt}, /* K. */
-  { INVALID, readInt}, /* L. */
-  { INVALID, readInt}, /* M. */
-  { 99, readInt}, /* N. */
-  { INVALID, readInt}, /* O. */
-  { INVALID, readInt}, /* P. */
-  { 69, matrixSource}, /* Q. */
-  { 97, readInt}, /* R. */
-  { 119, readInt}, /* S. */
-  { 116, readInt}, /* T. */
-  { 70, matrixControl}, /* U. */
-  { 35, readInt}, /* V. */
-  { 96, selectLfoWave}, /* W. */
-  { 71, readInt}, /* X. */
-  { INVALID, readInt}, /* Y. */
-  { 72, matrixDestination}, /* Z. */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { 82, readInt}, /* a. */
-  { 111, readInt}, /* b. */
-  { 32, envLfoControl}, /* c. */
-  { 83, readInt}, /* d. */
-  { 30, readInt}, /* e. */
-  { 42, readInt}, /* f. */
-  { INVALID, readInt}, /* g. */
-  { INVALID, readInt}, /* h. */
-  { 108, readInt}, /* i. */
-  { INVALID, readInt}, /* j. */
-  { 86, readInt}, /* k. */
-  { 29, readInt}, /* l. */
-  { INVALID, readInt}, /* m. */
-  { INVALID, readInt}, /* n. */
-  { INVALID, readInt}, /* o. */
-  { INVALID, readInt}, /* p. */
-  { 57, matrixSource}, /* q. */
-  { 85, readInt}, /* r. */
-  { 84, readInt}, /* s. */
-  { 27, coarseTune}, /* t. */
-  { 58, matrixControl}, /* u. */
-  { INVALID, readInt}, /* v. */
-  { 26, selectWave}, /* w. */
-  { 59, readInt}, /* x. */
-  { 31, readInt}, /* y. */
-  { 60, matrixDestination}, /* z. */
-  { INVALID, readInt}, /* ignored */
+  { 110, afterTouchWheelControl }, /* A. */
+  { INVALID, readInt },            /* B. */
+  { INVALID, readInt },            /* C. */
+  { 98, readInt },                 /* D. */
+  { INVALID, readInt },            /* E. */
+  { INVALID, readInt },            /* F. */
+  { INVALID, readInt },            /* G. */
+  { INVALID, readInt },            /* H. */
+  { INVALID, readInt },            /* I. */
+  { INVALID, readInt },            /* J. */
+  { INVALID, readInt },            /* K. */
+  { INVALID, readInt },            /* L. */
+  { INVALID, readInt },            /* M. */
+  { 99, lfoControl },              /* N. */
+  { INVALID, readInt },            /* O. */
+  { INVALID, readInt },            /* P. */
+  { 69, matrixSource },            /* Q. */
+  { 97, readInt },                 /* R. */
+  { 119, seqControl },             /* S. */
+  { 116, clockDivide },            /* T. */
+  { 70, matrixControl },           /* U. */
+  { 35, readInt },                 /* V. */
+  { 96, selectLfoWave },           /* W. */
+  { 71, readInt },                 /* X. */
+  { INVALID, readInt },            /* Y. */
+  { 72, matrixDestination },       /* Z. */
+  { INVALID, readInt },            /* ignored */
+  { INVALID, readInt },            /* ignored */
+  { INVALID, readInt },            /* ignored */
+  { INVALID, readInt },            /* ignored */
+  { INVALID, readInt },            /* ignored */
+  { INVALID, readInt },            /* ignored */
+  { 82, readInt },                 /* a. */
+  { 111, afterTouchWheelControl }, /* b. */
+  { 32, envLfoControl },           /* c. */
+  { 83, readInt },                 /* d. */
+  { 30, readInt },                 /* e. */
+  { 42, readInt },                 /* f. */
+  { INVALID, readInt },            /* g. */
+  { INVALID, readInt },            /* h. */
+  { 108, voiceMode2 },             /* i. */
+  { INVALID, readInt },            /* j. */
+  { 86, readInt },                 /* k. */
+  { 29, readInt },                 /* l. */
+  { INVALID, readInt },            /* m. */
+  { INVALID, readInt },            /* n. */
+  { INVALID, readInt },            /* o. */
+  { INVALID, readInt },            /* p. */
+  { 57, matrixSource },            /* q. */
+  { 85, readInt },                 /* r. */
+  { 84, readInt },                 /* s. */
+  { 27, coarseTune },              /* t. */
+  { 58, matrixControl },           /* u. */
+  { INVALID, readInt },            /* v. */
+  { 26, selectWave },              /* w. */
+  { 59, readInt },                 /* x. */
+  { 31, readInt},                  /* y. */
+  { 60, matrixDestination },       /* z. */
+  { INVALID, readInt },            /* ignored */
 };
 
 static const Cmd CMDS_COLON[ALPHABET_SIZE] = {
-  { 121, readInt}, /* A: */
-  { INVALID, readInt}, /* B: */
-  { INVALID, readInt}, /* C: */
-  { 102, readInt}, /* D: */
-  { INVALID, readInt}, /* E: */
-  { INVALID, readInt}, /* F: */
-  { INVALID, readInt}, /* G: */
-  { INVALID, readInt}, /* H: */
-  { INVALID, readInt}, /* I: */
-  { INVALID, readInt}, /* J: */
-  { INVALID, readInt}, /* K: */
-  { INVALID, readInt}, /* L: */
-  { INVALID, readInt}, /* M: */
-  { 103, readInt}, /* N: */
-  { INVALID, readInt}, /* O: */
-  { INVALID, readInt}, /* P: */
-  { 73, matrixSource}, /* Q: */
-  { 101, readInt}, /* R: */
-  { 120, readInt}, /* S: */
-  { 117, readInt}, /* T: */
-  { 74, matrixControl}, /* U: */
-  { INVALID, readInt}, /* V: */
-  { 100, selectLfoWave}, /* W: */
-  { 75, readInt}, /* X: */
-  { INVALID, readInt}, /* Y: */
-  { 76, matrixDestination}, /* Z: */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { 87, readInt}, /* a: */
-  { 112, readInt}, /* b: */
-  { 51, vcaControl}, /* c: */
-  { 88, readInt}, /* d: */
-  { INVALID, readInt}, /* e: */
-  { 39, readInt}, /* f: */
-  { INVALID, readInt}, /* g: */
-  { INVALID, readInt}, /* h: */
-  { INVALID, readInt}, /* i: */
-  { INVALID, readInt}, /* j: */
-  { 91, readInt}, /* k: */
-  { 50, readInt}, /* l: */
-  { INVALID, readInt}, /* m: */
-  { INVALID, readInt}, /* n: */
-  { INVALID, readInt}, /* o: */
-  { INVALID, readInt}, /* p: */
-  { 61, matrixSource}, /* q: */
-  { 90, readInt}, /* r: */
-  { 89, readInt}, /* s: */
-  { 28, fineTune}, /* t: */
-  { 62, matrixControl}, /* u: */
-  { INVALID, readInt}, /* v: */
-  { INVALID, readInt}, /* w: */
-  { 63, readInt}, /* x: */
-  { 52, readInt}, /* y: */
-  { 64, matrixDestination}, /* z: */
-  { INVALID, readInt}, /* ignored */
+  { 121, readInt },          /* A: */
+  { INVALID, readInt },      /* B: */
+  { INVALID, readInt },      /* C: */
+  { 102, readInt },          /* D: */
+  { INVALID, readInt },      /* E: */
+  { INVALID, readInt },      /* F: */
+  { INVALID, readInt },      /* G: */
+  { INVALID, readInt },      /* H: */
+  { INVALID, readInt },      /* I: */
+  { INVALID, readInt },      /* J: */
+  { INVALID, readInt },      /* K: */
+  { INVALID, readInt },      /* L: */
+  { INVALID, readInt },      /* M: */
+  { 103, lfoControl },       /* N: */
+  { INVALID, readInt },      /* O: */
+  { INVALID, readInt },      /* P: */
+  { 73, matrixSource },      /* Q: */
+  { 101, readInt },          /* R: */
+  { 120, seqTranspose },     /* S: */
+  { 117, clockDivide },      /* T: */
+  { 74, matrixControl },     /* U: */
+  { INVALID, readInt },      /* V: */
+  { 100, selectLfoWave },    /* W: */
+  { 75, readInt },           /* X: */
+  { INVALID, readInt },      /* Y: */
+  { 76, matrixDestination }, /* Z: */
+  { INVALID, readInt },      /* ignored */
+  { INVALID, readInt },      /* ignored */
+  { INVALID, readInt },      /* ignored */
+  { INVALID, readInt },      /* ignored */
+  { INVALID, readInt },      /* ignored */
+  { INVALID, readInt },      /* ignored */
+  { 87, readInt },           /* a: */
+  { 112, readInt },          /* b: */
+  { 51, vcaControl },        /* c: */
+  { 88, readInt },           /* d: */
+  { INVALID, readInt },      /* e: */
+  { 39, readInt },           /* f: */
+  { INVALID, readInt },      /* g: */
+  { INVALID, readInt },      /* h: */
+  { INVALID, readInt },      /* i: */
+  { INVALID, readInt },      /* j: */
+  { 91, readInt },           /* k: */
+  { 50, readInt },           /* l: */
+  { INVALID, readInt },      /* m: */
+  { INVALID, readInt },      /* n: */
+  { INVALID, readInt },      /* o: */
+  { INVALID, readInt },      /* p: */
+  { 61, matrixSource },      /* q: */
+  { 90, readInt },           /* r: */
+  { 89, readInt },           /* s: */
+  { 28, fineTune },          /* t: */
+  { 62, matrixControl },     /* u: */
+  { INVALID, readInt },      /* v: */
+  { INVALID, readInt },      /* w: */
+  { 63, readInt },           /* x: */
+  { 52, readInt },           /* y: */
+  { 64, matrixDestination }, /* z: */
+  { INVALID, readInt },      /* ignored */
 };
 
 static const Cmd CMDS_AT[ALPHABET_SIZE] = {
-  { INVALID, readInt}, /* A@ */
-  { INVALID, readInt}, /* B@ */
-  { INVALID, readInt}, /* C@ */
-  { INVALID, readInt}, /* D@ */
-  { INVALID, readInt}, /* E@ */
-  { INVALID, readInt}, /* F@ */
-  { INVALID, readInt}, /* G@ */
-  { INVALID, readInt}, /* H@ */
-  { INVALID, readInt}, /* I@ */
-  { INVALID, readInt}, /* J@ */
-  { INVALID, readInt}, /* K@ */
-  { INVALID, readInt}, /* L@ */
-  { INVALID, readInt}, /* M@ */
-  { INVALID, readInt}, /* N@ */
-  { INVALID, readInt}, /* O@ */
-  { INVALID, readInt}, /* P@ */
-  { INVALID, readInt}, /* Q@ */
-  { INVALID, readInt}, /* R@ */
-  { 106, readInt}, /* S@ */
-  { INVALID, readInt}, /* T@ */
-  { INVALID, readInt}, /* U@ */
-  { INVALID, readInt}, /* V@ */
-  { INVALID, readInt}, /* W@ */
-  { INVALID, readInt}, /* X@ */
-  { INVALID, readInt}, /* Y@ */
-  { INVALID, readInt}, /* Z@ */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* ignored */
-  { INVALID, readInt}, /* a@ */
-  { INVALID, readInt}, /* b@ */
-  { 48, envLfoControl}, /* c@ */
-  { INVALID, readInt}, /* d@ */
-  { 45, readInt}, /* e@ */
-  { INVALID, readInt}, /* f@ */
-  { INVALID, readInt}, /* g@ */
-  { INVALID, readInt}, /* h@ */
-  { INVALID, readInt}, /* i@ */
-  { INVALID, readInt}, /* j@ */
-  { 46, readInt}, /* k@ */
-  { 44, readInt}, /* l@ */
-  { INVALID, readInt}, /* m@ */
-  { INVALID, readInt}, /* n@ */
-  { INVALID, readInt}, /* o@ */
-  { INVALID, readInt}, /* p@ */
-  { INVALID, readInt}, /* q@ */
-  { INVALID, readInt}, /* r@ */
-  { INVALID, readInt}, /* s@ */
-  { 33, readInt}, /* t@ */
-  { INVALID, readInt}, /* u@ */
-  { INVALID, readInt}, /* v@ */
-  { INVALID, readInt}, /* w@ */
-  { INVALID, readInt}, /* x@ */
-  { 47, readInt}, /* y@ */
-  { INVALID, readInt}, /* z@ */
-  { INVALID, readInt}, /* ignored */
+  { INVALID, readInt },  /* A@ */
+  { INVALID, readInt },  /* B@ */
+  { INVALID, readInt },  /* C@ */
+  { INVALID, readInt },  /* D@ */
+  { INVALID, readInt },  /* E@ */
+  { INVALID, readInt },  /* F@ */
+  { INVALID, readInt },  /* G@ */
+  { INVALID, readInt },  /* H@ */
+  { INVALID, readInt },  /* I@ */
+  { INVALID, readInt },  /* J@ */
+  { INVALID, readInt },  /* K@ */
+  { INVALID, readInt },  /* L@ */
+  { INVALID, readInt },  /* M@ */
+  { INVALID, readInt },  /* N@ */
+  { INVALID, readInt },  /* O@ */
+  { INVALID, readInt },  /* P@ */
+  { INVALID, readInt },  /* Q@ */
+  { INVALID, readInt },  /* R@ */
+  { 106, readInt },      /* S@ */
+  { INVALID, readInt },  /* T@ */
+  { INVALID, readInt },  /* U@ */
+  { INVALID, readInt },  /* V@ */
+  { INVALID, readInt },  /* W@ */
+  { INVALID, readInt },  /* X@ */
+  { INVALID, readInt },  /* Y@ */
+  { INVALID, readInt },  /* Z@ */
+  { INVALID, readInt },  /* ignored */
+  { INVALID, readInt },  /* ignored */
+  { INVALID, readInt },  /* ignored */
+  { INVALID, readInt },  /* ignored */
+  { INVALID, readInt },  /* ignored */
+  { INVALID, readInt },  /* ignored */
+  { INVALID, readInt },  /* a@ */
+  { INVALID, readInt },  /* b@ */
+  { 48, envLfoControl }, /* c@ */
+  { INVALID, readInt },  /* d@ */
+  { 45, readInt },       /* e@ */
+  { INVALID, readInt },  /* f@ */
+  { INVALID, readInt },  /* g@ */
+  { INVALID, readInt },  /* h@ */
+  { INVALID, readInt },  /* i@ */
+  { INVALID, readInt },  /* j@ */
+  { 46, readInt },       /* k@ */
+  { 44, readInt },       /* l@ */
+  { INVALID, readInt },  /* m@ */
+  { INVALID, readInt },  /* n@ */
+  { INVALID, readInt },  /* o@ */
+  { INVALID, readInt },  /* p@ */
+  { INVALID, readInt },  /* q@ */
+  { INVALID, readInt },  /* r@ */
+  { INVALID, readInt },  /* s@ */
+  { 33, readInt },       /* t@ */
+  { INVALID, readInt },  /* u@ */
+  { INVALID, readInt },  /* v@ */
+  { INVALID, readInt },  /* w@ */
+  { INVALID, readInt },  /* x@ */
+  { 47, readInt },       /* y@ */
+  { INVALID, readInt },  /* z@ */
+  { INVALID, readInt },  /* ignored */
 };
 
 /*
@@ -391,7 +401,7 @@ static const Cmd CMDS_AT[ALPHABET_SIZE] = {
  * l3r - 101 - R:
  * l3d - 102 - D:
  * l3c - 103 - N:
- * c   - 104 - o
+ * c   - 104 - O
  * p   - 105 - p
  * s   - 106 - S@
  * V1  - 107 - i
