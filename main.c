@@ -309,8 +309,6 @@ uint16_t seqTranspose(char *s) {
 } 
 
 /* core functions */
-
-/* Need special delivery for internal clock */
 static char* eatSpace(char *s) {
   while (isspace(*s)) {
     s++;
@@ -343,7 +341,20 @@ static void runCmd(char l, char m, char *arg) {
             m == ':' ? CMDS_COLON[n] :
             m == '@' ? CMDS_AT[n]    : CMDS_PURE[ALPHABET_SIZE - 1];
   uint16_t v = cmd.f(arg);
-  editParam(cmd.n, v);
+  if (cmd.n == CLOCK) {
+    setClock(v);
+  } else { 
+    editParam(cmd.n, v); 
+  }
+}
+
+static void setClock(uint16_t v) {
+  v = (((v & 240) << 4) | v) & 3855;
+  sysexMsg[SYSEX_PARAM_IX] = CLOCK;
+  sysexMsg[SYSEX_VAL_UPPER_IX] = v >> 8;
+  sysexMsg[SYSEX_VAL_LOWER_IX] = v & 15;
+  fwrite(sysexMsg, SYSEX_MSG_SIZE, 1, stdout);
+  fflush(stdout);
 }
 
 static void editParam(uint8_t p, uint16_t v) {

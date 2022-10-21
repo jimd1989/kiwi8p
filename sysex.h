@@ -66,6 +66,7 @@ uint16_t seqTranspose(char *);
 
 #define INVALID 128
 #define NOOP    129
+#define CLOCK   114
 
 /* Alphabets */
 #define ALPHABET_SIZE 59
@@ -90,7 +91,7 @@ static const Cmd CMDS_PURE[ALPHABET_SIZE] = {
   { 65, matrixSource },      /* Q */
   { 93, readInt },           /* R */
   { 113, midiControl },      /* S */
-  { 114, readInt },          /* T */
+  { CLOCK, readInt },        /* T */
   { 66, matrixControl },     /* U */
   { 34, readInt },           /* V */
   { 92, selectLfoWave },     /* W */
