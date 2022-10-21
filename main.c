@@ -15,6 +15,7 @@
 static char * eatSpace(char *);
 static void   parseCmd(char *);
 static void   runCmd(char, char, char *);
+static void   setClock(uint16_t);
 static void   editParam(uint8_t, uint16_t);
 
 /* input transformers */
@@ -122,7 +123,7 @@ uint16_t matrixSource(char *s) {
          *s == 'd' ? 5  :
          *s == 'v' ? 6  :
          *s == 'n' ? 7  :
-         *s == 't' ? 25 : INVALID;
+         *s == 'a' ? 25 : INVALID;
 }
 
 uint16_t matrixControl(char *s) {
@@ -143,7 +144,7 @@ uint16_t matrixControl(char *s) {
   return *s == 'o' ? 0 + i  :
          *s == 'w' ? 8 + i  :
          *s == 'd' ? 10 + i :
-         *s == 't' ? 12 + i : INVALID;
+         *s == 'a' ? 12 + i : INVALID;
 }
 
 uint16_t matrixDestination(char *s) {
