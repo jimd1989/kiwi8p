@@ -1,6 +1,6 @@
 The slider on my Kiwi-8P is busted so I'm making a shell to drop sysex commands into it. As with all my audio endeavors, I am making this solely to suit my needs, but the code will be small for anybody to hack to his or her desires.
 
-Not intended for realtime performance, though I can't imagine this is a dog either. Uses plenty of conditional statements instead of smart data structures. It's C after all. 
+Had to introduce a delay between parameter transmissions, so this isn't intended for realtime performance. Use CC for that. There's a nice CC:parameter mapping in the file `cc.h` that is not used in this code, but is a helpful reference.
 
 Some bounds checking and sanitization when it's easy enough, but don't feed this bad input.
 

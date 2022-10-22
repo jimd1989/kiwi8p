@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "sysex.h"
 
@@ -127,8 +128,8 @@ uint16_t matrixSource(char *s) {
 }
 
 uint16_t matrixControl(char *s) {
-  uint8_t i = (*s == '-');
-  INCREMENT(s)
+  uint8_t i = 0;
+  if (*s == '-') { i = 1 ; s++; }
   if (*s == 'b') {
     s++;
     return *s == 'u'  ? 2 + i :
@@ -190,10 +191,10 @@ uint16_t selectLfoWave(char *s) {
 }
 
 uint16_t lfoControl(char *s) {
-  uint8_t f = (*s == '+');
+  uint8_t f = 0;
   float d = 0.0f;
   uint8_t l = INVALID;
-  INCREMENT(s)
+  if (*s == '+') { f = 1; s++; }
   d = atof(s);
   l = d == 0.0f   ? 0  :
       d == 2.0f   ? 1  :
@@ -381,6 +382,7 @@ int main(void) {
     t = strtok(buf, ";\n");
     while (t != NULL) {
       parseCmd(t);
+      usleep(20000);
       t = strtok(NULL, ";\n");
     }
   }
