@@ -351,10 +351,17 @@ static void runCmd(char l, char m, char *arg) {
 }
 
 static void setClock(uint16_t v) {
-  v = (((v & 240) << 4) | v) & 3855;
+  uint8_t h = (v >> 4) & 15;
+  uint8_t l = v & 15;
   sysexMsg[SYSEX_PARAM_IX] = CLOCK;
-  sysexMsg[SYSEX_VAL_UPPER_IX] = v >> 8;
-  sysexMsg[SYSEX_VAL_LOWER_IX] = v & 15;
+  sysexMsg[SYSEX_VAL_UPPER_IX] = 0;
+  sysexMsg[SYSEX_VAL_LOWER_IX] = h;
+  fwrite(sysexMsg, SYSEX_MSG_SIZE, 1, stdout);
+  fflush(stdout);
+  usleep(20000);
+  sysexMsg[SYSEX_PARAM_IX] = CLOCK + 1;
+  sysexMsg[SYSEX_VAL_UPPER_IX] = 0;
+  sysexMsg[SYSEX_VAL_LOWER_IX] = l;
   fwrite(sysexMsg, SYSEX_MSG_SIZE, 1, stdout);
   fflush(stdout);
 }

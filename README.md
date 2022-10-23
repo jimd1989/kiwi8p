@@ -6,7 +6,13 @@ Some bounds checking and sanitization when it's easy enough, but don't feed this
 
 Commands are J/K style and intended to be passed `all;on;one;line`, so that each line is a discrete slice of synthesizer state. I've found this condensed view to be very useful in previous musical efforts.
 
-Unix philosophy. Wrap this with `rlwrap`. Pipe its output to a `/dev/rmidi0` or whatever file.
+Does not build off of any midi library. Unix philosophy. Wrap with `rlwrap` and direct its output to your system's midi port.
+
+```
+cc main.c -o kiwi8p
+mv kiwi8p /usr/local/bin
+rlwrap kiwi8p 1> /dev/rmidi0
+```
 
 | Command | Sysex byte | Description | Args |
 |---------|------------|-------------|------|
@@ -53,7 +59,7 @@ Unix philosophy. Wrap this with `rlwrap`. Pipe its output to a `/dev/rmidi0` or 
 | `b.` | 111 | modwheel routings | (l)(f)(v) in parallel: <br><br> l → dco lfo <br> f → filter cutoff <br> v → vca level <br><br> ex: `b.fvl` | 
 | `b:` | 112 | modwheel level | [0,127] |
 | `S` | 113 | performance switches | (a)(s)(h) in parallel: <br><br> a → enable arp <br> s → play sequence <br> h → hold note <br><br> ex: `Sash` |
-| `T` | 114 | internal clock rate | [0,4095] correlating to [5,300]bpm |
+| `T` | 114 | internal clock rate | {n} ∈ [1,255] correlating to [5,300]bpm; 0 keeps system clock time; lower rates are {n} + 5, while resolution decreases beyond 210 or so <br><br> ex: `T118` → 123bpm |
 | `T.` | 116 | arp clock divide | 1.2 → half note <br> 1.4 → quarter note <br> 1.8 → eighth note <br> 1.85 → eighth note half swing <br> 1.89 → eighth note full swing <br> 1.83 → eighth note triplet <br> 1.16 → sixteenth note <br> 1.165 → sixteenth note half swing <br> 1.169 → sixteenth note full swing <br> 1.163 → sixteenth note triplet <br> 1.32 → thirty-second note <br> 1.323 → thirty-second note triplet <br> 1.64 → sixty-fourth note |
 | `T:` | 117 | sequence clock divide | 1.2 → half note <br> 1.4 → quarter note <br> 1.8 → eighth note <br> 1.85 → eighth note half swing <br> 1.89 → eighth note full swing <br> 1.83 → eighth note triplet <br> 1.16 → sixteenth note <br> 1.165 → sixteenth note half swing <br> 1.169 → sixteenth note full swing <br> 1.163 → sixteenth note triplet <br> 1.32 → thirty-second note <br> 1.323 → thirty-second note triplet <br> 1.64 → sixty-fourth note |
 | `b` | 118 | bend range | [0,127] representing a +/- octave span at 127 |
